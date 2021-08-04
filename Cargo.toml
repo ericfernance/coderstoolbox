@@ -1,0 +1,14 @@
+[package]
+name = "coderstoolbox"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+gio="*"
+glib="*"
+
+[dependencies.gtk]
+version = "0.14.0"
+package = "gtk"
