@@ -17,11 +17,8 @@ pub fn calculate_md5(param: &[glib::Value])->Option<glib::Value>{
     println!("{:?}", txt_source_value);
     let buffer_source_value: gtk::TextBuffer = txt_source_value.buffer().unwrap();
     println!("{:?}", buffer_source_value);
-    //println!("{:?}", buffer_source_value.to_value());
-    let start = buffer_source_value.start_iter();
-    let end = buffer_source_value.end_iter();
-    let g = buffer_source_value.text(&start, &end, true).unwrap();
-    let s = g.as_str();
+
+    let s = buffer_source_value.text(&buffer_source_value.start_iter(), &buffer_source_value.end_iter(), false).unwrap();
     println!("{}",s);
     None
 }
