@@ -8,6 +8,7 @@ edition = "2018"
 [dependencies]
 gio="*"
 glib="*"
+md5="*"
 
 [dependencies.gtk]
 version = "0.14.0"
