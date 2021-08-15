@@ -1,6 +1,7 @@
 use gtk::{glib, Widget, Application, BoxBuilder, NONE_BUILDABLE};
 use gtk::prelude::*;
 use gtk::{ApplicationWindow, Builder, Button, MessageDialog, Label};
+use gio::prelude::*;
 
 mod md5;
 mod jsonphp;
@@ -21,12 +22,15 @@ fn main() {
 }
 
 fn build_ui(application: &gtk::Application) {
-    println!("{}", application);
-    let glade_src = include_str!("ui/main.ui");
-    //let builder: gtk::Builder = Builder::new();
+    // Load the compiled resource bundle
+    let resources_bytes = include_bytes!("./ui/resources.gresource");
+    let resource_data = glib::Bytes::from(&resources_bytes[..]);
+    let res = gio::Resource::from_data(&resource_data).unwrap();
+    gio::resources_register(&res);
 
     unsafe {
-        APP_BUILDER = Some(Builder::from_file("src/ui/main.ui"));
+        //APP_BUILDER = Some(Builder::from_file("src/ui/main.ui"));
+        APP_BUILDER = Some(Builder::from_resource("/com/thisisericrobert/coderstoolbox/main.ui"));
     }
     let builder = get_app_builder();
     //builder.add_from_file("ui/main.ui");

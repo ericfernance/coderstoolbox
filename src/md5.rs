@@ -27,8 +27,14 @@ pub fn calculate_md5(param: &[glib::Value])->Option<glib::Value>{
 pub fn update_ui(builder: &gtk::Builder){
     let box_inner_right: gtk::Box = builder.object("box_right_inner").expect("Couldn't get box");
 
+    let resources_bytes = include_bytes!("./ui/resources.gresource");
+    let resource_data = glib::Bytes::from(&resources_bytes[..]);
+    let res = gio::Resource::from_data(&resource_data).unwrap();
+    gio::resources_register(&res);
+
     unsafe {
-        MOD_BUILDER = Some(Builder::from_file("src/ui/md5.ui"));
+        //APP_BUILDER = Some(Builder::from_file("src/ui/main.ui"));
+        MOD_BUILDER = Some(Builder::from_resource("/com/thisisericrobert/coderstoolbox/md5.ui"));
     }
 
     let mod_builder = get_mod_builder();
