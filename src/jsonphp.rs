@@ -1,5 +1,5 @@
 use gtk::prelude::*;
-use gtk::{Builder, ApplicationWindow, Application};
+use gtk::{Builder, ApplicationWindow, Application, MessageDialog, DialogFlags, MessageType, ButtonsType};
 use gtk::Window;
 use glib::prelude::*;
 use std::fmt::Debug;
@@ -33,7 +33,19 @@ pub fn convert_json(param: &[glib::Value])->Option<glib::Value>{
     let buffer_source_value: gtk::TextBuffer = txt_source_value.buffer().unwrap();
     let source_value = buffer_source_value.text(&buffer_source_value.start_iter(), &buffer_source_value.end_iter(), false).unwrap();
     //let source_value = "{\"foo\":\"bar\",\"fiz\":1,\"deep\":{\"first_name\":\"Eric\", \"last_name\":\"Fernance\",\"awards\":[\"hero\",\"legend\"]}}";
-    let json:HashMap<String, Value> = serde_json::from_str(&source_value).ok()?;
+    let json:HashMap<String, Value> = serde_json::from_str(&source_value).map_err(|err: serde_json::Error|{
+        println!("There was an error {:?}", err );
+        //MessageDialog::new(None::<&Window>,DialogFlags::empty(),MessageType::Info,ButtonsType::Close,"Hello world").run().await();
+        let error_dialog = gtk::MessageDialogBuilder::new()
+            .modal(true)
+            .buttons(gtk::ButtonsType::Close)
+            .text("Problem with json")
+            .secondary_text("Your json is not valid.")
+            .build();
+
+        error_dialog.run();
+        error_dialog.close();
+    }).ok()?;
     let mut result_string = String::from("[");
     for (key, value) in &json{
         unpack(key, value, &mut result_string);
