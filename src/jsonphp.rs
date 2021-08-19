@@ -8,15 +8,36 @@ use std::collections::HashMap;
 
 static mut MOD_BUILDER:Option<gtk::Builder>=None;
 
+fn is_key_numeric(key: &str)->bool {
+    for c in key.chars() {
+        if (c.is_alphabetic()) {
+            return false;
+        }
+    }
+    true
+}
+
 pub fn unpack(key: &str, value: &Value, result_string: &mut String){
     println!("key {:?} has value {:?}",key, value);
     //result_string.push_str("TEST\t");
     if value.is_object() {
         println!("{} is an object", key);
-        result_string.push_str(&*format!("\"{}\"=>[",key));
-        for (k,v) in value.as_object().unwrap(){
-            println!("\t{} has key {} with value {}",key, k, v);
-            unpack(k,v,result_string);
+        if (!is_key_numeric(key)) {
+            result_string.push_str(&*format!("\"{}\"=>[", key));
+        } else {
+            result_string.push_str(&*format!("[")); // don't need an key because it's an array
+        }
+
+        for (k, v) in value.as_object().unwrap() {
+            println!("\t{} has key {} with value {}", key, k, v);
+            unpack(k, v, result_string);
+        }
+        result_string.push_str("],");
+    } else if value.is_array() {
+        println!("{} is an array", key);
+        result_string.push_str(&*format!("\"{}\"=>[", key));
+        for (k, v) in value.as_array().unwrap().iter().enumerate() {
+            unpack(&k.to_string(),v,result_string);
         }
         result_string.push_str("],");
     } else {
@@ -42,7 +63,6 @@ pub fn convert_json(param: &[glib::Value])->Option<glib::Value>{
             .text("Problem with json")
             .secondary_text("Your json is not valid.")
             .build();
-
         error_dialog.run();
         error_dialog.close();
     }).ok()?;
