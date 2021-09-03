@@ -5,6 +5,7 @@ use gio::prelude::*;
 
 mod md5;
 mod jsonphp;
+mod strlength;
 
 static mut APP_BUILDER:Option<gtk::Builder>=None;
 
@@ -39,12 +40,15 @@ fn build_ui(application: &gtk::Application) {
     // connect the buttons.
     let md5_button: Button = builder.object("button_md5").expect("no button");
     let button_json: Button = builder.object("button_json").unwrap();
+    let button_stringlength: Button = builder.object("button_stringlength").unwrap();
     md5_button.connect_clicked( |_| {md5::update_ui(get_app_builder())});
     button_json.connect_clicked( |_| {jsonphp::update_ui(get_app_builder())});
+    button_stringlength.connect_clicked(|_| {strlength::update_ui(get_app_builder())});
 
     window.set_application(Some(application));
     window.show_all();
 }
+
 
 pub fn get_app_builder() -> &'static gtk::Builder {
     unsafe {

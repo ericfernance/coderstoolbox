@@ -4,5 +4,6 @@
         <file>jsonphp.ui</file>
         <file>main.ui</file>
         <file>md5.ui</file>
+        <file>stringlength.ui</file>
     </gresource>
 </gresources>

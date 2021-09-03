@@ -36,9 +36,11 @@
             <child>
               <object class="GtkButton" id="button_json">
                 <property name="label" translatable="yes">JSON to PHP</property>
+                <property name="name">button_json</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <signal name="clicked" handler="click_md5" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -47,12 +49,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">button</property>
+              <object class="GtkButton" id="button_stringlength">
+                <property name="label" translatable="yes">String Length</property>
+                <property name="name">button_stringlength</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="some_junk123" swapped="no"/>
+                <signal name="clicked" handler="click_strlen" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
