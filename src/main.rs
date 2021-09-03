@@ -3,6 +3,7 @@ use gtk::prelude::*;
 use gtk::{ApplicationWindow, Builder, Button, MessageDialog, Label};
 use gio::prelude::*;
 
+mod helpers;
 mod md5;
 mod jsonphp;
 mod strlength;

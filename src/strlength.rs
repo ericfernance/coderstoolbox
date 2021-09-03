@@ -3,25 +3,23 @@ use gtk::{Builder, ApplicationWindow, Application};
 use gtk::Window;
 use glib::prelude::*;
 use std::fmt::Debug;
-use md5;
-use md5::Digest;
+
+use crate::helpers::gtk_helper;
 
 
 static mut MOD_BUILDER:Option<gtk::Builder>=None;
+
+// ericislagend is returning c.
 
 pub fn calculate_length(param: &[glib::Value])->Option<glib::Value>{
     println!("Calculate length!!");
     let mod_builder = get_mod_builder();
     let txt_source_value: gtk::TextView = mod_builder.object("txtSourceValue").unwrap();
-    let buffer_source_value: gtk::TextBuffer = txt_source_value.buffer().unwrap();
-    let source_value = buffer_source_value.text(&buffer_source_value.start_iter(), &buffer_source_value.end_iter(), false).unwrap();
+    let source_value: glib::GString = gtk_helper::get_text_view(&txt_source_value);
     let length = source_value.chars().count();
-    println!("{:x}", length);
-    let length_str: String = format!("{:x}",length);
-    println!("{}", length_str);
+    let length_str: String = format!("{:?}",length);
     let txt_result: gtk::Entry = mod_builder.object("entry_result").unwrap();
-    let buffer_result: gtk::EntryBuffer = txt_result.buffer();
-    buffer_result.set_text(&length_str);
+    gtk_helper::set_entry_text(&txt_result, length_str);
     None
 }
 
