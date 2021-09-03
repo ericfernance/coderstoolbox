@@ -92,6 +92,8 @@ pub fn update_ui(builder: &gtk::Builder){
         MOD_BUILDER = Some(Builder::from_resource("/com/thisisericrobert/coderstoolbox/jsonphp.ui"));
     }
 
+    let children = box_inner_right.children();
+    children.iter().for_each(|x| box_inner_right.remove(x));
     let mod_builder = get_mod_builder();
     let md5_box: gtk::Box = mod_builder.object("box_jsonphp").expect("not here");
     box_inner_right.add_child(mod_builder,&md5_box, None);

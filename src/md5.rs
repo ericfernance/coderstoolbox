@@ -39,8 +39,10 @@ pub fn update_ui(builder: &gtk::Builder){
 
     let mod_builder = get_mod_builder();
     let md5_box: gtk::Box = mod_builder.object("box_md5").expect("not here");
-    box_inner_right.add_child(mod_builder,&md5_box, None);
 
+    let children = box_inner_right.children();
+    children.iter().for_each(|x| box_inner_right.remove(x));
+    box_inner_right.add_child(mod_builder,&md5_box, None);
     mod_builder.connect_signals(|_,handler|{
         println!("{}" , handler);
         match handler {
