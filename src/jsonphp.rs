@@ -6,6 +6,8 @@ use std::fmt::Debug;
 use serde_json::{Result, Value};
 use std::collections::HashMap;
 
+use crate::helpers::gtk_helper;
+
 static mut MOD_BUILDER:Option<gtk::Builder>=None;
 
 fn is_key_numeric(key: &str)->bool {
@@ -51,9 +53,7 @@ pub fn convert_json(param: &[glib::Value])->Option<glib::Value>{
 
     let mod_builder = get_mod_builder();
     let txt_source_value: gtk::TextView = mod_builder.object("txtSourceValue").unwrap();
-    let buffer_source_value: gtk::TextBuffer = txt_source_value.buffer().unwrap();
-    let source_value = buffer_source_value.text(&buffer_source_value.start_iter(), &buffer_source_value.end_iter(), false).unwrap();
-    //let source_value = "{\"foo\":\"bar\",\"fiz\":1,\"deep\":{\"first_name\":\"Eric\", \"last_name\":\"Fernance\",\"awards\":[\"hero\",\"legend\"]}}";
+    let source_value = gtk_helper::get_text_view(&txt_source_value);
     let json:HashMap<String, Value> = serde_json::from_str(&source_value).map_err(|err: serde_json::Error|{
         println!("There was an error {:?}", err );
         //MessageDialog::new(None::<&Window>,DialogFlags::empty(),MessageType::Info,ButtonsType::Close,"Hello world").run().await();

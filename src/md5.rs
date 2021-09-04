@@ -6,6 +6,7 @@ use std::fmt::Debug;
 use md5;
 use md5::Digest;
 
+use crate::helpers::gtk_helper;
 
 
 static mut MOD_BUILDER:Option<gtk::Builder>=None;
@@ -13,15 +14,11 @@ static mut MOD_BUILDER:Option<gtk::Builder>=None;
 pub fn calculate_md5(param: &[glib::Value])->Option<glib::Value>{
     let mod_builder = get_mod_builder();
     let txt_source_value: gtk::TextView = mod_builder.object("txtSourceValue").unwrap();
-    let buffer_source_value: gtk::TextBuffer = txt_source_value.buffer().unwrap();
-    let source_value = buffer_source_value.text(&buffer_source_value.start_iter(), &buffer_source_value.end_iter(), false).unwrap();
-    let hash:Digest = md5::compute(source_value. as_str());
-    println!("{:x}", hash);
+    let source_value = gtk_helper::get_text_view(&txt_source_value);
+    let hash:Digest = md5::compute(source_value.as_str());
     let hash_str: String = format!("{:x}",hash);
-    println!("{}", hash_str);
     let txt_result: gtk::Entry = mod_builder.object("entry_result").unwrap();
-    let buffer_result: gtk::EntryBuffer = txt_result.buffer();
-    buffer_result.set_text(&hash_str);
+    gtk_helper::set_entry_text(&txt_result, hash_str);
     None
 }
 
