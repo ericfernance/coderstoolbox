@@ -2,13 +2,15 @@ use gtk::{glib, Widget, Application, BoxBuilder, NONE_BUILDABLE};
 use gtk::prelude::*;
 use gtk::{ApplicationWindow, Builder, Button, MessageDialog, Label};
 use gio::prelude::*;
+use std::collections::HashMap;
 
 mod helpers;
-mod md5;
-mod jsonphp;
-mod strlength;
+
+mod modules;
+
 
 static mut APP_BUILDER:Option<gtk::Builder>=None;
+static mut COMPONENTS: Option<HashMap<String,String>> = None;
 
 fn main() {
     let application = gtk::Application::new(
@@ -25,7 +27,7 @@ fn main() {
 
 fn build_ui(application: &gtk::Application) {
     // Load the compiled resource bundle
-    let resources_bytes = include_bytes!("./ui/resources.gresource");
+    let resources_bytes = include_bytes!("./views/resources.gresource");
     let resource_data = glib::Bytes::from(&resources_bytes[..]);
     let res = gio::Resource::from_data(&resource_data).unwrap();
     gio::resources_register(&res);
@@ -42,9 +44,9 @@ fn build_ui(application: &gtk::Application) {
     let md5_button: Button = builder.object("button_md5").expect("no button");
     let button_json: Button = builder.object("button_json").unwrap();
     let button_stringlength: Button = builder.object("button_stringlength").unwrap();
-    md5_button.connect_clicked( |_| {md5::update_ui(get_app_builder())});
-    button_json.connect_clicked( |_| {jsonphp::update_ui(get_app_builder())});
-    button_stringlength.connect_clicked(|_| {strlength::update_ui(get_app_builder())});
+    md5_button.connect_clicked( |_| {modules::md5::update_ui(get_app_builder())});
+    button_json.connect_clicked( |_| {modules::jsonphp::update_ui(get_app_builder())});
+    button_stringlength.connect_clicked(|_| {modules::strlength::update_ui(get_app_builder())});
 
     window.set_application(Some(application));
     window.show_all();
