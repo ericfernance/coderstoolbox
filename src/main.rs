@@ -10,7 +10,7 @@ mod modules;
 
 
 static mut APP_BUILDER:Option<gtk::Builder>=None;
-static mut COMPONENTS: Option<HashMap<String,String>> = None;
+//static mut COMPONENTS: Option<HashMap<String,String>> = None;
 
 fn main() {
     let application = gtk::Application::new(
